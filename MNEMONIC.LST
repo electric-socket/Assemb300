@@ -1,0 +1,684 @@
+; Instruction assembly file;  by Joe Tamburino.  9/12/89
+; Data is taken directly from Pg. 472-475 of Appendix A of
+; some book owned by Frank Archambeault
+
+;MNEM    | 1st BYTE  | OPERAND TYPE          | 2nd byte  | CLASS
+
+AAA      | h37       | NO_OPERAND            |           | 0
+AAD      | hd5       | NO_OPERAND            | h0a       | 0
+AAM      | hd4       | NO_OPERAND            | h0a       | 0
+AAS      | h3f       | NO_OPERAND            |           | 0
+ADC      | b000100dw | REG/MEM,REGISTER      |           | 13
+ADC      | b0001010w | IMMEDIATE,AL/AX       |           | 13
+ADC      | b100000sw | IMMEDIATE,REG/MEM     | b010      | 13
+ADD      | b000000dw | REG/MEM,REGISTER      |           | 13
+ADD      | b100000sw | IMMEDIATE,REG/MEM     | b000      | 13
+ADD      | b0000010w | IMMEDIATE,AL/AX       |           | 13
+AND      | b001000dw | REG/MEM,REGISTER      |           | 13
+AND      | b1000000w | IMMEDIATE,REG/MEM     | b100      | 13
+AND      | b0010010w | IMMEDIATE,AL/AX       |           | 13
+CALL     | he8       | DIRECT_IN_SEGMENT     |           | 14
+CALL     | hff       | INDIRECT_IN_SEGMENT   | b010      | 14
+CALL     | h9a       | DIRECT_INTRASEGMENT   |           | 14
+CALL     | hff       | INDIRECT_INTRASEGMENT | b011      | 14
+CBW      | h98       | NO_OPERAND            |           | 0
+CLC      | hf8       | NO_OPERAND            |           | 0
+CLD      | hfc       | NO_OPERAND            |           | 0
+CLI      | hfa       | NO_OPERAND            |           | 0
+CMC      | hf5       | NO_OPERAND            |           | 0
+CMP      | b001110dw | REG/MEM,REGISTER      |           | 13
+CMP      | b100000sw | IMMEDIATE,REG/MEM     | b111      | 13
+CMP      | b0011110w | IMMEDIATE,AL/AX       |           | 13
+CMPSB    | ha6       | NO_OPERAND            |           | 0
+CMPSW    | ha7       | NO_OPERAND            |           | 0
+CWD      | h99       | NO_OPERAND            |           | 0
+DAA      | h27       | NO_OPERAND            |           | 0
+DAS      | h2f       | NO_OPERAND            |           | 0
+DEC      | b1111111w | REGISTER/MEMORY       | b001      | 12
+DEC      | b01001reg | 16-BIT_REGISTER       |           | 12
+DIV      | b1111011w | REGISTER/MEMORY       | b110      | 9
+ESC      | b11011xxx | ESC                   |           | 10
+HLT      | hf4       | NO_OPERAND            |           | 0
+IDIV     | b1111011w | REGISTER/MEMORY       | b111      | 9
+IMUL     | b1111011w | REGISTER/MEMORY       | b101      | 9
+IN       | b1110010w | IMMEDIATE_PORT        |           | 7
+IN       | b1110110w | PORT_ADDRESS_IN_DX    |           | 7
+INC      | b1111111w | REGISTER/MEMORY       | b000      | 12
+INC      | b01000reg | 16-BIT_REGISTER       |           | 12
+INT      | hcd       | INT                   |           | 6
+INTO     | hce       | NO_OPERAND            |           | 0
+IRET     | hcf       | NO_OPERAND            |           | 0
+JA       | h77       | 8-BIT-REL             |           | 5
+JAE      | h73       | 8-BIT-REL             |           | 5
+JB       | h72       | 8-BIT-REL             |           | 5
+JC       | h72       | 8-BIT-REL             |           | 5
+JBE      | h76       | 8-BIT-REL             |           | 5
+JCXZ     | he3       | 8-BIT-REL             |           | 5
+JG       | h7f       | 8-BIT-REL             |           | 5
+JGE      | h7d       | 8-BIT-REL             |           | 5
+JL       | h7c       | 8-BIT-REL             |           | 5
+JLE      | h7e       | 8-BIT-REL             |           | 5
+JNS      | h79       | 8-BIT-REL             |           | 5
+JNZ      | h75       | 8-BIT-REL             |           | 5
+JNE      | h75       | 8-BIT-REL             |           | 5
+JO       | h70       | 8-BIT-REL             |           | 5
+JPE      | h7a       | 8-BIT-REL             |           | 5
+JP       | h7a       | 8-BIT-REL             |           | 5
+JPO      | h7b       | 8-BIT-REL             |           | 5
+JNP      | h7b       | 8-BIT-REL             |           | 5
+JS       | h78       | 8-BIT-REL             |           | 5
+JZ       | h74       | 8-BIT-REL             |           | 5
+JE       | h74       | 8-BIT-REL             |           | 5
+JMP      | heb       | 8-BIT-REL             |           | 14
+JMP      | he9       | DIRECT_IN_SEGMENT     |           | 14
+JMP      | hff       | INDIRECT_IN_SEGMENT   | b100      | 14
+JMP      | hea       | DIRECT_INTRASEGMENT   |           | 14
+JMP      | hff       | INDIRECT_INTRASEGMENT | b101      | 14
+LAHF     | h9f       | NO_OPERAND            |           | 0
+LDS      | hc5       | REG/MEM,REGISTER      |           | 13
+LEA      | h8d       | REG/MEM,REGISTER      |           | 13
+LES      | hc4       | REG/MEM,REGISTER      |           | 13
+LOCK     | hf0       | NO_OPERAND            |           | 0
+LODSB    | hac       | NO_OPERAND            |           | 0
+LODSW    | had       | NO_OPERAND            |           | 0
+LOOP     | he2       | 8-BIT-REL             |           | 5
+LOOPZ    | he1       | 8-BIT-REL             |           | 5
+LOOPE    | he1       | 8-BIT-REL             |           | 5
+LOOPNZ   | he0       | 8-BIT-REL             |           | 5
+LOOPNE   | he0       | 8-BIT-REL             |           | 5
+MOV      | b100010dw | REG/MEM,REGISTER      |           | 4
+MOV      | b1100011w | IMMEDIATE,REG/MEM     | b000      | 4
+MOV      | b1011wreg | IMMEDIATE,REGISTER    |           | 4
+MOV      | b1010000w | MEMORY,AL/AX          |           | 4
+MOV      | b1010001w | AL/AX,MEMORY          |           | 4
+MOV      | h8e       | REG/MEM,SR            |           | 4
+MOV      | h8c       | SR,REG/MEM            |           | 4
+MOVSB    | ha4       | NO_OPERAND            |           | 0
+MOVSW    | ha5       | NO_OPERAND            |           | 0
+MUL      | b1111011w | REGISTER/MEMORY       | b100      | 9
+NEG      | b1111011w | REGISTER/MEMORY       | b011      | 9
+NOP      | h90       | NO_OPERAND            |           | 0
+NOT      | b1111011w | REGISTER/MEMORY       | b010      | 9
+OR       | b000010dw | REG/MEM,REGISTER      |           | 13
+OR       | b1000000w | IMMEDIATE,REG/MEM     | b001      | 13
+OR       | b0000110w | IMMEDIATE,AL/AX       |           | 13
+OUT      | b1110011w | IMMEDIATE_PORT        |           | 8
+OUT      | b1110111w | PORT_ADDRESS_IN_DX    |           | 8
+POP      | h8f       | REGISTER/MEMORY       | b000      | 11
+POP      | b01011reg | 16-BIT_REGISTER       |           | 11
+POP      | b000LR111 | SEGMENT_REGISTER      |           | 11
+POPF     | h9d       | NO_OPERAND            |           | 0
+PUSH     | hff       | REGISTER/MEMORY       | b110      | 11
+PUSH     | b01010reg | 16-BIT_REGISTER       |           | 11
+PUSH     | b000LR110 | SEGMENT_REGISTER      |           | 11
+PUSHF    | h9c       | NO_OPERAND            |           | 0
+RCL      | b110100vw | REGISTER/MEMORY       | b010      | 9
+RCR      | b110100vw | REGISTER/MEMORY       | b011      | 9
+REP      | hf3       | ANOTHER_INSTRUCTION   |           | 1
+REPE     | hf3       | ANOTHER_INSTRUCTION   |           | 1
+REPZ     | hf3       | ANOTHER_INSTRUCTION   |           | 1
+REPNE    | hf2       | ANOTHER_INSTRUCTION   |           | 1
+REPNZ    | hf2       | ANOTHER_INSTRUCTION   |           | 1
+RET      | hc3       | NO_OPERAND            |           | 3
+RET      | hc2       | RET                   |           | 3
+RETF     | hcb       | NO_OPERAND            |           | 3
+RETF     | hca       | RET                   |           | 3
+ROL      | b110100vw | REGISTER/MEMORY       | b000      | 9
+ROR      | b110100vw | REGISTER/MEMORY       | b001      | 9
+SAHF     | h9e       | NO_OPERAND            |           | 0
+SAR      | b110100vw | REGISTER/MEMORY       | b111      | 9
+SBB      | b000110dw | REG/MEM,REGISTER      |           | 13
+SBB      | b100000sw | IMMEDIATE,REG/MEM     | b011      | 13
+SBB      | b0001110w | IMMEDIATE,AL/AX       |           | 13
+SCASB    | hae       | NO_OPERAND            |           | 0
+SCASW    | haf       | NO_OPERAND            |           | 0
+SHL      | b110100vw | REGISTER/MEMORY       | b100      | 9
+SAL      | b110100vw | REGISTER/MEMORY       | b100      | 9
+SHR      | b110100vw | REGISTER/MEMORY       | b101      | 9
+STC      | hf9       | NO_OPERAND            |           | 0
+STD      | hfd       | NO_OPERAND            |           | 0
+STI      | hfb       | NO_OPERAND            |           | 0
+STOSB    | haa       | NO_OPERAND            |           | 0
+STOSW    | hab       | NO_OPERAND            |           | 0
+SUB      | b001010dw | REG/MEM,REGISTER      |           | 13
+SUB      | b100000sw | IMMEDIATE,REG/MEM     | b101      | 13
+SUB      | b0010110w | IMMEDIATE,AL/AX       |           | 13
+TEST     | b1000010w | REG/MEM,REGISTER      |           | 13
+TEST     | b1111011w | IMMEDIATE,REG/MEM     | b000      | 13
+TEST     | b1010100w | IMMEDIATE,AL/AX       |           | 13
+WAIT     | h9b       | NO_OPERAND            |           | 0
+XCHG     | b1000011w | REG/MEM,REGISTER      |           | 2
+XCHG     | b10010brg | 16-BIT_REGISTER       |           | 2
+XLAT     | hd7       | NO_OPERAND            |           | 0
+XOR      | b001100dw | REG/MEM,REGISTER      |           | 13
+XOR      | b1000000w | IMMEDIATE,REG/MEM     | b110      | 13
+XOR      | b0011010w | IMMEDIATE,AL/AX       |           | 13
+
+END OF LIST
+
+Mod R/M Values from Intel IA-32 manual Table 2-1 (16-bit), Table 2-2 (32 bit)
+
+In cases of operands bits 0 1 2 3 4 5 6 7
+                                      d w
+
+type 13; xxxxx0w 11 Reg1 reg2
+              1w mod reg r/m
+              sw 11 010 reg  immediate data
+
+
+Opcode is 1 or 2 bytes, then Mod-R/M byte and SIB byte
+Mod Byte        SIB Byte
+Bits
+7-6  5-3  2-0   7-6    5-3   2-0
+Mod  Reg  R/M   Scale Index Base
+
+If instruction has displacement, it immediately follows
+Mod-R/M and SIb bytes; the displacement is 8, 16, or 32 bits.
+If there is an Immediate value, it follows the displacement.
+The immediate value is always last.
+
+REG field    W=1                 Operand size based on w bit
+Value  16-bit   32-Bit            W bit    16-bit    32-bit
+        Code    Code      W=0               mode      mode
+ 000     AX      EAX      AL       0       8 Bits    8 Bits
+ 001     CX      ECX      CL       1      16 Bits   32 Bits
+ 010     DX      EDX      DL
+ 011     BX      EBX      BL      S Bit, if 1, sign extends
+ 100     SP      ESP      AH        8-bit data to 16 or 32 bits
+ 101     BP      EBP      CH
+ 110     SI      ESI      DH
+ 111     DI      EDI      BH
+
+Segment register (S) bit      Special Register
+2-bit    3-bit    Seg          (eee) field
+S-reg2   S-reg3   Reg        Control   Debug
+  00      000      ES          CR0      DR0
+  01      001      CS          rsvd     DR1
+  10      010      DS          CR2      DR2
+  11      011      SS          CR3      DR3
+          100      FS          CR4      rsvd
+          101      GS          rsvd     rsvd
+          110     rsvd         rsvd     DR6
+          111     rsvd         rsvd     DR7
+
+
+tttn field for test or jump
+tttn  Mnemonic Condition
+0000  O         Overflow
+0001  NO        No overflow
+0010  B,   NAE  Below, Not above or equal
+0011  NB,  AE   Not below, Above or equal
+0100  E,   Z    Equal, Zero
+0101  NE,  NZ   Not equal, Not zero
+0110  BE,  NA   Below or equal, Not above
+0111  NBE, A    Not below or equal, Above
+1000  S         Sign
+1001  NS        Not sign
+1010  P,   PE   Parity, Parity Even
+1011  NP,  PO   Not parity, Parity Odd
+1100  L,   NGE  Less than, Not greater than or equal to
+1101  NL,  GE   Not less than, Greater than or equal to
+1110  LE,  NG   Less than or equal to, Not greater than
+1111  NLE, G    Not less than or equal to, Greater than
+
+Encoding of Operation Direction (d) Bit
+d        Source             Destination
+0 reg Field              ModR/M or SIB Byte
+1 ModR/M or SIB Byte     reg Field
+
+
+
+AAA—
+AAD—
+AAM—
+AAS—
+ADC—
+ADD—
+ADDPD—
+ADDPS—
+ADDSD—
+ADDSS—
+AND—
+ANDPD—
+ANDPS—
+ANDNPD—
+ANDNPS—
+ARPL—
+BOUND—
+BSF—
+BSR—
+BSWAP—
+BT—
+BTC—
+BTR—
+BTS—
+CALL—
+CBW
+CWDE—
+CDQ—
+CLC—
+CLD—
+CLFLUSH—
+CLI
+CLTS—
+CMC
+
+CMOVcc
+
+CMP
+CMPPD
+CMPPS
+CMPS
+CMPSB
+CMPSW
+CMPSD
+CMPSD
+CMPSS
+CMPXCHG
+CMPXCHG8B
+COMISD
+COMISS
+CPUID
+CVTDQ2PD
+CVTDQ2PS
+CVTPD2DQ
+CVTPD2PI
+CVTPD2PS
+CVTPI2PD
+CVTPI2PS
+CVTPS2DQ
+CVTPS2PD
+CVTPS2PI
+CVTSD2SI
+CVTSD2SS
+CVTSI2SD
+CVTSI2SS
+CVTSS2SD
+CVTSS2SI
+CVTTPD2PI
+CVTTPD2DQ
+CVTTPS2DQ
+CVTTPS2PI
+CVTTSD2SI
+CVTTSS2SI
+CWD
+CDQ
+CWDE
+DAA
+DAS
+DEC
+DIV
+DIVPD
+DIVPS
+DIVSD
+DIVSS
+EMMS
+ENTER
+F2XM1
+FABS
+FADD
+FADDP
+FIADD
+FBLD
+FBSTP
+FCHS
+FCLEX
+FNCLEX
+
+FCMOVc
+
+FCOM
+FCOMP
+FCOMPP
+FCOMI
+FCOMIP
+FUCOMI
+FUCOMIP
+FCOS
+FDECSTP
+FDIV
+FDIVP
+FIDIV
+FDIVR
+FDIVRP
+FIDIVR
+FFREE
+FICOM
+FICOMP
+FILD
+FINCSTP
+FINIT
+FNINIT
+FIST
+FISTP
+FLD
+FLD1
+FLDL2T
+FLDL2E
+FLDPI
+FLDLG2
+FLDLN2
+FLDZ
+FLDCW
+FLDENV
+FMUL
+FMULP
+FIMUL
+FNOP
+FPATAN
+FPREM
+FPREM1
+FPTAN
+FRNDINT
+FRSTOR
+FSAVE
+FNSAVE
+FSCALE
+FSIN
+FSINCOS
+FSQRT
+FST
+FSTP
+FSTCW
+FNSTCW
+FSTENV
+FNSTENV
+FSTSW
+FNSTSW
+FSUB
+FSUBP
+FISUB
+FSUBR
+FSUBRP
+FISUBR
+FTST
+FUCOM
+FUCOMP
+FUCOMPP
+FWAIT
+FXAM
+FXCH
+FXRSTOR
+FXSAVE
+FXTRACT
+FYL2X
+FYL2XP1
+HLT
+IDIV
+IMUL
+IN
+INC
+INS
+INSB
+INSW
+INSD
+
+INT n
+
+INTO
+INT 3
+INVD
+INVLPG
+IRET
+IRETD
+
+Jcc
+
+JMP
+LAHF—
+LAR—
+LDMXCSR—
+LDS
+LES
+LFS
+LGS
+LSS
+LEA
+LEAVE
+LES
+LFENCE
+LFS
+LGDT
+LIDT
+LGS
+LLDT
+LIDT
+LMSW
+LOCK
+LODS
+LODSB
+LODSW
+LODSD
+LOOP
+
+LOOPcc
+
+LSL
+LSS
+LTR
+MASKMOVDQU
+MASKMOVQ
+MAXPD
+MAXPS
+MAXSD
+MAXSS
+MINPD
+MINPS
+MINSD
+MINSS
+MOV
+MOV
+MOV
+MOVAPD
+MOVAPS
+MOVD
+MOVDQA
+MOVDQU
+MOVDQ2Q
+MOVHLPS
+MOVHPD
+MOVHPS
+MOVLHPS
+MOVLPD
+MOVLPS
+MOVMSKPD
+MOVMSKPS
+MOVNTDQ
+MOVNTI
+MOVNTPD
+MOVNTPS
+MOVNTQ
+MOVQ
+MOVQ2DQ
+MOVS
+MOVSB
+MOVSW
+MOVSD
+MOVSD
+MOVSS
+MOVSX
+MOVUPD
+MOVUPS
+MOVZX
+MUL
+MULPD
+MULPS
+MULSD
+MULSS
+NEG
+NOP
+NOT
+OR
+ORPD
+ORPS
+OUT
+OUTS
+OUTSB
+OUTSW
+OUTSD
+PACKSSWB
+PACKSSDW
+PACKUSWB
+PADDB
+PADDW
+PADDD
+PADDQ
+PADDSB
+PADDSW
+PADDUSB
+PADDUSW
+PAND
+PANDN
+PAUSE
+PAVGB
+PAVGW
+PCMPEQB
+PCMPEQW
+PCMPEQD
+PCMPGTB
+PCMPGTW
+PCMPGTD
+PEXTRW
+PINSRW
+PMADDWD
+PMAXSW
+PMAXUB
+PMINSW
+PMINUB
+PMOVMSKB
+PMULHUW
+PMULHW
+PMULLW
+PMULUDQ
+POP
+POPA
+POPAD
+POPF
+POPFD
+POR
+PREFETCHh
+PSADBW
+PSHUFD
+PSHUFHW
+PSHUFLW
+PSHUFW
+PSLLDQ
+PSLLW
+PSLLD
+PSLLQ
+PSRAW
+PSRAD
+PSRLDQ
+PSRLW
+PSRLD
+PSRLQ
+PSUBB
+PSUBW
+PSUBD
+PSUBQ
+PSUBSB
+PSUBSW
+PSUBUSB
+PSUBUSW
+PUNPCKHBW
+PUNPCKHWD
+PUNPCKHDQ
+PUNPCKHQDQ
+PUNPCKLBW
+PUNPCKLWD
+PUNPCKLDQ
+PUNPCKLQDQ
+PUSH—
+PUSHA
+PUSHAD
+PUSHF
+PUSHFD
+PXOR
+RCL
+RCR
+ROL
+ROR
+RCPPS
+RCPSS
+RDMSR
+RDPMC
+RDTSC
+RDTSC
+REP
+REPE
+REPZ
+REPNE
+REPNZ
+RET
+ROL
+ROR
+RSM
+RSQRTPS
+RSQRTSS
+SAHF
+SAL
+SAR
+SHL
+SHR
+SBB
+SCAS
+SCASB
+SCASW
+SCASD
+
+SETcc
+
+SFENCE
+SGDT
+SIDT
+SHL
+SHR
+SHLD
+SHRD
+SHUFPD
+SHUFPS
+SIDT
+SLDT
+SMSW
+SQRTPD
+SQRTPS
+SQRTSD
+SQRTSS
+STC
+STD
+STI
+STMXCSR
+STOS
+STOSB
+STOSW
+STOSD
+STR
+SUB
+SUBPD
+SUBPS
+SUBSD
+SUBSS
+SYSENTER
+SYSEXIT
+TEST
+UCOMISD
+UCOMISS
+UD2
+UNPCKHPD
+UNPCKHPS
+UNPCKLPD
+UNPCKLPS
+VERR
+VERW
+WAIT
+FWAIT
+WBINVD
+WRMSR
+XADD
+XCHG
+XLAT
+XLATB
+XOR
+XORPD
+XORPS
+

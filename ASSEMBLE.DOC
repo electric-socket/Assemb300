@@ -1,0 +1,331 @@
+
+
+
+
+
+                   Instruction assembly code, by Joe Tamburino
+                   -------------------------------------------
+
+                                   Version 1.20
+
+
+                               Joseph J. Tamburino
+                                7 Christopher Rd.
+                                Westford, MA 01886
+                                  (508) 692-7756
+                             Prodigy Accnt:  NWNJ91A
+
+
+
+             I had the need to write an 8088/86 instruction assembler, so I
+        did, and here is version 1.20 of the results.  Being such a low
+        version number, this program is far from perfect.  However, it
+        should be sufficient for anyone wanting to implement an instruction
+        assembler for their programs.
+
+             This particular version of ASSEMBLE is written in Turbo
+        Pascal, and tested with Turbo Pascal, version 5.0.  As of
+        September, 1989, I am currently developing an assembler-language
+        version.  Here are the files included with the archived version of
+        ASSEMBLE:
+
+             ASSEM120.PAS:  The whole entire assembler unit which defines,
+                            among other things, the procedure "Assemble"
+                            which does the assembling.
+             ASSEMBLE.PAS:  A program used to demonstrate the use of
+                            ASSEM120.  Uses a debugger to verify the
+                            output of procedure Assemble.
+             ASSEMBLE.EXE:  The compiled version of ASSEMBLE.PAS.
+             MNEMONIC.LST:  The data file for ASSEM120.
+             TRANSLAT.PAS:  Translation program to convert MNEMONIC.LST to
+                            MNEMONIC.BIN.
+             TRANSLAT.EXE:  The compiled version of TRANSLAT.PAS
+             MNEMONIC.BIN:  The translated version of MNEMONIC.LST
+             ASSEMBLE.DOC:  This document
+
+
+        Operation of ASSEM120
+        ---------------------
+
+             The following paragraphs describe a brief description of
+        ASSEM120, its features, and how it works.
+
+             Use the Assemble procedure from the ASSEM120 unit whenever you
+        need to get the machine language equivalent of an assembly language
+        line of code.  For instance, if you need to get the machine
+        language form of "mov al,[bx+9]" you would use, from your program,
+        the line:  "Assemble('mov al,[bx+9]')" and it will be assembled
+        automatically for you.  Please note that the case of the characters
+        fed to Assemble is unimportant as there is a Capitalize procedure
+        in the ASSEM120 unit.
+
+
+
+
+
+
+
+
+
+
+
+             The ASSEM120 unit makes four objects available to the program
+        calling it.  One of them, obviously (I hope!), is the Assemble
+        procedure itself which is defined this way:
+
+                  Procedure Assemble(Instruct:  string);
+
+             ASSEM120 also makes these things available:
+
+                  Var
+                       BytePtr:  integer;
+                       Bytes:  array[1..7] of byte;
+                       InstructionAddr:  word;
+
+             The Bytes[] array will contain the bytes from your assembled
+        instruction after Assemble is finished.  BytePtr will point to the
+        last byte that the instruction uses PLUS ONE.  InstructionAddr is
+        set during unit initialization to be 0.  It reflects where the next
+        instruction to be assembled will reside.  At any time, you may
+        alter its contents to point to any location in a current segment.
+        For instance, it you wanted to assemble an instruction that resides
+        at location XXXX:0100, you would put $100 into InstructionAddr.
+
+             When Assem120 initializes (it will initialize every time the
+        program starts) it will open and read its data file called
+        "MNEMONIC.BIN".  This file is derived from the file "MNEMONIC.LST"
+        by the program "TRANSLATE.EXE".  "MNEMONIC.LST" is a text file that
+        can be edited with a standard file editor.  It currently contains
+        every mnemonic (that I know of) of the 8088/86 microprocessor.  Use
+        the existing file as a guide for entering in your own instructions
+        (such as from an 80286 or 80386, or from a math coprocessor, etc.)
+        if you wish.
+
+             The "MNEMONIC.LST" file is divided into a series of fields,
+        including the mnemonic, first byte, second byte, operand type, and
+        class field.  I am not going to delve into the specifics here.  If
+        you really need to know them, the ASEM120.PAS program code
+        illustrates the use of all of the fields.  Feel free to get in
+        touch with me if you need further assistance.  But for now, the
+        mnemonic field contains the instruction.  The first byte field
+        contains either a hexadecimal number (proceeded by a "h") which
+        represents the first byte that the instruction generates or a
+        binary number (proceeded by a "b").  If the number is binary, it
+        may have imbedded characters to represent variable bit-fields.
+        These characters are case insensitive.  See the DecodeByte
+        procedure for details.  The second byte represents an actual second
+        byte if the instruction takes no operands (such as AAD).
+        Otherwise, it represents the REG field of the second byte for
+        operand types that use a specific 3-digit binary number for the REG
+        field (it might be handy to be referencing an instruction encoding
+        guide while reading this).  The operand type field represents the
+        method in which the instruction decodes its operands.  Again, an
+        encoding guide would be helpful here.  See the CONST section of
+        ASEM120 for details on this.  Lastly, the class field is my own
+        personal breakdown of the 8088/86 instructions into classes.  See
+        the comments in the GetOperandType procedure to see which
+        instructions each class includes.  When implementing your own
+
+
+
+
+
+
+
+
+
+
+        instructions, you may have to add your own class and/or operand
+        type if you don't find any existing ones that are the same.
+
+             ASEM120 can handle most of the instructions that debuggers
+        such as Symdeb and Debug can handle.  I am not going to include a
+        complete discussion of what will and will not work, but in general,
+        most everything that SYMDEB can handle, ASEM120 can also handle.
+        Since ASEM120 is not a symbolic assembler, it will not handle
+        labels.  Segments overrides are not treated as separate
+        instructions.  So, to use them, you must prefix them to a memory
+        location like you would in a debugger (such as ES:[BX]).  Also, the
+        REP instruction will take another instruction as its argument (such
+        as REP MOVSB) or it can be used alone.  Since ASEM120 does not use
+        labels, it is sometimes necessary to specify the explicitly specify
+        the size of data you are using.  Here are some examples:
+
+             mov [bx+9],byte ptr 8
+             mov [bx+si],word ptr 67h
+             call far [8]
+             call near [bx]
+             call far 0abcdh    (generates call 0000:abcd)
+             jmp short 97h      (SHORT is necessary for 8-bit relatives)
+             jmp near 97h
+             retf               (a FAR return)
+             retf 6             (a FAR return, pop 6 bytes)
+
+             One of the poorer aspects of ASSEM120 is its lack of error
+        handling.  Because of this, if you make an error, you can't rely on
+        ASEM120 to notice.  The algorithm ASEM120 is based on defaults
+        everything.  That is, if you fail to specify something important,
+        or specify something incorrectly, ASEM120 will may return incorrect
+        results.  For instance, here are some possible invalid entries, and
+        what it will interpret those entries to be:
+
+              mov al,bx        - - >       mov ax,bx
+              mov al,9876h     - - >       mov ax,9876h
+              push byte ptr [5] - ->       push word ptr [5]
+              push bl          - - >       push bx
+
+             In some aspects, this lack of error checking is nice.  For
+        instance if you accidentally specify AL when you meant AX, it will
+        automatically use AX.  But what if you had some important data in
+        AH?  Well then, you're in trouble -- until I ever write an
+        assembler with full error checking (don't hold your breath!)
+
+
+        Running ASSEMBLE.EXE
+        --------------------
+
+             This is a demo program which demonstrates the use of ASSEM120.
+        Before you run it, make sure you have a command.com program in the
+        root directory of drive C:, and that you have a SYMDEB program
+        somewhere in your search directory.  If you don't, just modify
+        those entries in the CONST section of ASSEMBLE.PAS, and run it.
+        DEBUG can be used in place of SYMDEB if you happen to have this
+        debugger.  Also, make sure that MNEMONIC.BIN is in the current
+
+
+
+
+
+
+
+
+
+
+        directory so that ASSEM120 knows where to find it.  One you have it
+        running, enter the offset address you wish to begin assembling in.
+        After that, the program continuously prompts you for instructions
+        to assemble and assembles it.  After each assembly, it ports the
+        bytes into an intermediate script file which it creates, and
+        executes your debugger program.  The debugger then dis-assembles
+        all the instructions from the starting address that you specified
+        until the last instruction you have entered.  Since this all this
+        is done each and every time you enter an instruction, your previous
+        instructions may not stay in memory by the time the debugger starts
+        to disassemble them the next time.  If you enter the instructions
+        starting at offset 100h, you shouldn't have much of a problem,
+        however.
+
+
+        TRANSLAT.PAS
+        ------------
+
+             This quick, little, and virtually undocumented program simply
+        converts the MNEMONIC.LST file into the MNEMONIC.BIN file.  It
+        doesn't ask any questions, and I don't think it will even tell you
+        "goodbye" when it leaves -- but what it will do is strip a few of
+        the text-oriented fields of MNEMONIC.LST into single byte fields by
+        the time it gets to MNENONIC.BIN.  The fields are made up of the
+        exact information that is defined in the EncodeRec type of
+        ASSEM120.  If the number of records (or lines in the .LST file)
+        goes beyond 160, you must increase it's max in both TRANSLAT.PAS
+        and ASSEM120.PAS.  Do this by updating the line "ChartType = array
+        [1..160] of EncodeRec" which resides in the TYPE section of both
+        programs.
+
+
+        In Conclusion ...
+        -----------------
+
+             Well I guess that's all I really have to say about ASSEM120.
+        Please remember:  if you have any questions, please get in touch
+        with me.  I have provided my name, address, phone number, and
+        Prodigy account number on the first page.
+
+             As for the future of ASSEM goes, my intent was to make this be
+        both an assembler as well as a dis-assembler.  But I'll include the
+        dis-assembler part in future versions of ASSEM since I have yet to
+        code it.  Currently, I am working on version 2.00 of this program
+        which will be written in assembler language instead of Pascal.
+        This way, the code will be much smaller and people will be able to
+        do things such as make it memory resident without having to take up
+        too much memory.  Of course, it will also be faster for people who
+        want to revolve their own full fledged file assembler around this
+        one.  The interface for a project of this type would be fairly easy
+        to implement.  All one would have to do is have the assembler
+        convert labels to numbers and ship the line directly to the
+        Assemble procedure.  The actual "label-management" that must be
+        done with an assembler would be the trickiest part of the project,
+        I would think.
+
+
+
+
+
+
+
+
+
+
+
+             Other future projects include better error-handling and
+        support for other processors.
+
+
+        Using my code
+        -------------
+
+             If you wish to develop ASSEM into your own program, either as
+        is, or modified, I would appreciate some compensation for my time
+        and effort, although I am not going to require it.  At the very
+        least, I would like both my name, address, and phone number to be
+        displayed somewhere in the credit section of your own
+        documentation.  If you do so, I thank you very much.  Also, if
+        anyone wants the code to be revised in some way, feel free to get
+        in touch with me, and we'll talk about it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

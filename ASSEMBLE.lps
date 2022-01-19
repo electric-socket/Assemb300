@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="2">
+      <Unit0>
+        <Filename Value="ASSEMBLE.PAS"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="AssembleTest"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="ASSEM120.PAS"/>
+        <UnitName Value="Assem120"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="404"/>
+        <CursorPos X="64" Y="431"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit1>
+    </Units>
+    <JumpHistory Count="21" HistoryIndex="20">
+      <Position1>
+        <Filename Value="ASSEMBLE.PAS"/>
+      </Position1>
+      <Position2>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="33" Column="12" TopLine="17"/>
+      </Position2>
+      <Position3>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="34" Column="97" TopLine="17"/>
+      </Position3>
+      <Position4>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="39" Column="98" TopLine="17"/>
+      </Position4>
+      <Position5>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="295" Column="13" TopLine="267"/>
+      </Position5>
+      <Position6>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="319" Column="32" TopLine="292"/>
+      </Position6>
+      <Position7>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="320" Column="43" TopLine="293"/>
+      </Position7>
+      <Position8>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="326" Column="19" TopLine="299"/>
+      </Position8>
+      <Position9>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="327" Column="44" TopLine="300"/>
+      </Position9>
+      <Position10>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="334" Column="44" TopLine="307"/>
+      </Position10>
+      <Position11>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="337" Column="43" TopLine="310"/>
+      </Position11>
+      <Position12>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="359" Column="50" TopLine="332"/>
+      </Position12>
+      <Position13>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="362" Column="43" TopLine="335"/>
+      </Position13>
+      <Position14>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="365" Column="43" TopLine="338"/>
+      </Position14>
+      <Position15>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="372" Column="44" TopLine="345"/>
+      </Position15>
+      <Position16>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="379" Column="59" TopLine="352"/>
+      </Position16>
+      <Position17>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="382" Column="44" TopLine="355"/>
+      </Position17>
+      <Position18>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="385" Column="49" TopLine="358"/>
+      </Position18>
+      <Position19>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="394" Column="48" TopLine="367"/>
+      </Position19>
+      <Position20>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="400" Column="65" TopLine="373"/>
+      </Position20>
+      <Position21>
+        <Filename Value="ASSEM120.PAS"/>
+        <Caret Line="410" Column="53" TopLine="383"/>
+      </Position21>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
